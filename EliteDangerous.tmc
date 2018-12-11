@@ -1,0 +1,169 @@
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------//
+// Grufftas's ACKNOWLEDGEMENTS //    																															//
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------//
+// Big thanks to Aussiedroid for giving the inspiration to do this and a handy reference
+// This wouldn't be possible without him
+//
+
+include "target.tmh";
+include "EliteDangerous_Bindings.ttm";
+include "EliteDangerous_Commands.tmh";
+include "EliteDangerous_Internal.tmh";
+
+define LongPressDelay 400
+define CycleDelay 600
+define SafetyDelay 1500
+
+int main(){
+
+    Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&Joystick, MODE_EXCLUDED);
+	Configure(&Throttle, MODE_EXCLUDED);
+	Configure(&T16000L, MODE_EXCLUDED);
+	Configure(&LMFD, MODE_EXCLUDED);
+	Configure(&RMFD, MODE_EXCLUDED);
+	Configure(&TFRPRudder, MODE_EXCLUDED);
+	
+    if(Init(&EventHandle)) return 1;
+
+	SetKBRate(25, 75);
+	SetKBLayout(KB_ENG);
+	
+	initResetStick();
+	initCommands();
+	
+	// rocker switch modifiers 
+	// - upper layer hostiles, fire group
+	// - down layer for defense
+	SetShiftButton(&TWCSThrottle, TBTN1, &TWCSThrottle, TBTN4, TBTN5);
+        
+    SetupDefaultAxis();
+    
+	///////////////////
+	// joystick mapping
+	// fire weapons, countermesaures / sheild cells(d) / firegroups + speed preset (u)
+	MapKeyUMD(&T16000, TS1, DeployHardpoints, PrimaryFire); 
+	MapKeyUMD(&T16000, TS2, 
+		TEMPO(PULSE+SetSpeedDeadstop, PULSE+SetSpeedBlueZone, LongPressDelay),
+		SecondaryFire,
+		TEMPO(PULSE+FireChaff, PULSE+ChargeECM, LongPressDelay)); 
+		
+	MapKeyUMD(&T16000, TS3, 
+		PULSE+PrevFireGroup, 
+		TEMPO(PULSE+SelectTargetAhead, PULSE+SelectWingmanTarget, LongPressDelay ),
+		TEMPO(PULSE+DeployHeatsink, CHAIN(PULSE+DeployHeatsink, PULSE+ToggleSilentRunning), LongPressDelay)); 
+		
+	MapKeyUMD(&T16000, TS4, 
+		PULSE+NextFireGroup, 
+		PULSE+ToggleFlightAssist,
+		TEMPO(PULSE+UseShieldCell, CHAIN(PULSE+DeployHeatsink, PULSE+UseShieldCell), LongPressDelay)); 	
+		
+	
+	MapKey(&T16000, B10,PULSE+ToggleCargoScoop);
+	MapKey(&T16000, B9, PULSE+ToggleShipLights);
+	MapKey(&T16000, B8, PULSE+ToggleLandingGear);
+
+	// orbit lines / rotational correction (s) / jettison (s/d) + long hold	
+	MapKeyIOUMD(&T16000, B13, 0, 0, PULSE+ToggleRotationalCorrection, PULSE+ToggleOrbitLines, TEMPO(0, PULSE+EjectAllCargo, SafetyDelay), 0);
+	
+	// mic / friends (hold)
+	MapKey(&T16000, B12, TEMPO(PULSE+MicrophoneMute, PULSE+OpenFriendsMenu, LongPressDelay));
+
+	// hold to hide ship gui / weapon colour (u) / engine colour (d)
+	MapKeyUMD(&T16000, B11, 		
+		PULSE+WeaponColourToggle,
+		TEMPO(PULSE+ToggleTrafficControl, PULSE+HideShipGui, LongPressDelay),
+		PULSE+EngineColourToggle);
+
+		
+	MapKeyIO(&T16000, B16, 
+		PULSE+ToggleSilentRunning,
+		TEMPO(PULSE+OpenSystemMap, PULSE+OpenGalaxyMap, LongPressDelay));
+	
+	// engines / navigate ui / ui panel select (s)
+	MapKeyIO(&T16000, H1U, TEMPO(PULSE+SelectCommsPanel, PULSE+QuickCommsPanel, LongPressDelay),    UI_Up);	
+	MapKeyIO(&T16000, H1L, TEMPO(PULSE+SelectTargetPanel, RequestDocking, LongPressDelay),			UI_Left);
+	MapKeyIO(&T16000, H1R, PULSE+SelectSystemsPanel, 												UI_Right);
+	MapKeyIO(&T16000, H1D, PULSE+SelectRolePanel,    												UI_Down);
+	
+	////////////////////
+	// throttle mappings	
+	
+	// engines - boost / hyper jump (u) / supercruise (d)
+	MapKeyUMD(&TWCSThrottle, TBTN3, 
+		PULSE+EngageHyperspace,
+		EngageEngineBoost,
+		PULSE+EngageSupercruise);
+	
+	// navigation - engage hyperspace or supercruise / galaxy map (u) / system map (d)
+	MapKeyUMD(&TWCSThrottle, TBTN2, 
+		PULSE+OpenGalaxyMap,
+		PULSE+EngageHyperSuper,
+		PULSE+OpenSystemMap);
+	
+	// power distribution
+	MapKey(&TWCSThrottle, THAT1U, TEMPO(PULSE+IncreaseEnginesPower, 	TEMPO(FullPowerToEnginesSys, FullPowerToEnginesWep, LongPressDelay), LongPressDelay));
+	MapKey(&TWCSThrottle, THAT1L, TEMPO(PULSE+IncreaseSystemsPower, 	TEMPO(FullPowerToSystemsEng, FullPowerToSystemsWep, LongPressDelay), LongPressDelay));
+	MapKey(&TWCSThrottle, THAT1R, TEMPO(PULSE+IncreaseWeaponsPower, 	TEMPO(FullPowerToWeaponsSys, FullPowerToWeaponsEng, LongPressDelay), LongPressDelay));
+	MapKey(&TWCSThrottle, THAT1D, TEMPO(PULSE+BalancePowerDistribution, TEMPO(PowerTankProfile, PowerOffenceProfile, LongPressDelay), LongPressDelay));
+	
+	// tagets / hostiles(u) / subsystems(u)
+	MapKeyUMD(&TWCSThrottle, THAT2R, 
+		TEMPO(PULSE+SelectNextHostile, REXEC(7, CycleDelay, "ActKey(KEYON+PULSE+SelectNextHostile);")),
+		TEMPO(PULSE+SelectNextTarget, REXEC(7, CycleDelay, "ActKey(KEYON+PULSE+SelectNextTarget);")));	
+	
+	MapKeyUMD(&TWCSThrottle, THAT2L, 
+	    TEMPO(PULSE+SelectPrevHostile, REXEC(8, CycleDelay, "ActKey(KEYON+PULSE+SelectPrevHostile);")),
+		TEMPO(PULSE+SelectPrevTarget, REXEC(8, CycleDelay, "ActKey(KEYON+PULSE+SelectPrevTarget);")));
+	
+	MapKeyUMD(&TWCSThrottle, THAT2D, 
+		TEMPO(PULSE+SelectNextSubsystem, REXEC(7, CycleDelay / 2, "ActKey(KEYON+PULSE+SelectNextSubsystem);")),
+		PULSE+SelectHighestThreat);	
+		
+	MapKeyUMD(&TWCSThrottle, THAT2U, 
+		TEMPO(PULSE+SelectPrevSubsystem, REXEC(7, CycleDelay / 2, "ActKey(KEYON+PULSE+SelectPrevSubsystem);")),
+		PULSE+TargetNextSystemInRoute);	
+	
+	// wing / fighter orders
+	MapKeyUMD(&TWCSThrottle, THAT3U, 
+		PULSE+SelectWingman1,
+		PULSE+ToggleCargoScoop,
+		TEMPO(PULSE+HoldFire, PULSE+OrderFocusTarget, LongPressDelay));
+		
+	MapKeyUMD(&TWCSThrottle, THAT3D, 
+		PULSE+EngageWingmanNavLock,
+		PULSE+ToggleLandingGear,
+		TEMPO(PULSE+HoldPosition, TEMPO(PULSE+OrderFollow, PULSE+OrderFighterDock, LongPressDelay), LongPressDelay));
+		
+	MapKeyUMD(&TWCSThrottle, THAT3L, 	
+		PULSE+SelectWingman2,
+		TEMPO(PULSE+ToggleHandbrake, PULSE+RecallDismissShip, LongPressDelay),
+		PULSE+OrderDefensiveBehaviour);
+		
+	MapKeyUMD(&TWCSThrottle, THAT3R, 
+		PULSE+SelectWingman3,
+		PULSE+ToggleShipLights,
+		PULSE+OrderAggresiveBehaviour);
+	
+	// throttle hand rudder - next/prev panel tab
+	KeyAxis(&TWCSThrottle, TRDR, 0, AXMAP2(3, PULSE+SelectPrevTab, 0, PULSE+SelectNextTab));
+}
+
+int EventHandle(int type, alias o, int x)
+{
+	int TCSPEDAL;
+	if (&o == &TWCSThrottle){
+		
+		GetAxisData(&o, x);
+		axdata.val = AxisVal(o[x], &axdata);
+		if (x == TCSLEFT | x == TCSRIGHT){
+			axdata.locked = 1;
+			TCSPEDAL = -TWCSThrottle[TCSRIGHT]/2 + TWCSThrottle[TCSLEFT]/2;
+			DXAxis(DX_SLIDER_AXIS, TCSPEDAL);
+		}
+		else DefaultMapping(&o, x);
+		
+		if(!axdata.locked & !axdata.relative) GameOutput(&o, x, axdata.val); 
+	}
+	else DefaultMapping(&o, x);
+}

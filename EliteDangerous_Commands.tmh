@@ -1,0 +1,51 @@
+int FullPowerToEnginesSplit, FullPowerToEnginesSys, FullPowerToEnginesWep;
+int FullPowerToSystemsSplit, FullPowerToSystemsEng, FullPowerToSystemsWep;
+int FullPowerToWeaponsSplit, FullPowerToWeaponsSys, FullPowerToWeaponsEng;
+int PowerTankProfile, PowerOffenceProfile;
+int ToggleTrafficControl;
+int RequestDocking;
+
+int initCommands(){
+	
+	// engines
+	FullPowerToEnginesSplit = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseEnginesPower);
+	FullPowerToEnginesSys = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseEnginesPower);
+	FullPowerToEnginesWep = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseEnginesPower);
+	// systems
+	FullPowerToSystemsSplit = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseSystemsPower);
+	FullPowerToSystemsEng = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseSystemsPower);
+	FullPowerToSystemsWep = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseSystemsPower);
+	// weapons
+	FullPowerToWeaponsSplit = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseWeaponsPower);
+	FullPowerToWeaponsSys = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseSystemsPower, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseSystemsPower);
+	FullPowerToWeaponsEng = CHAIN(PULSE+BalancePowerDistribution, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseEnginesPower, D(), PULSE+IncreaseWeaponsPower, D(), PULSE+IncreaseWeaponsPower);
+	
+	PowerTankProfile = CHAIN(																		// MACRO: PIP ALTERNATIVE: 3xWEP, 3xSYS
+			PULSE+BalancePowerDistribution, D(),															// HOLD down Balance PIPs button to activate
+			PULSE+IncreaseWeaponsPower, D(),
+			PULSE+IncreaseSystemsPower, D(),
+			PULSE+IncreaseWeaponsPower, D(),
+			PULSE+IncreaseWeaponsPower, D(),
+			PULSE+IncreaseSystemsPower);
+
+	PowerOffenceProfile = CHAIN(																// MACRO: PIP ALTERNATIVE: 3xWEP, 3xENG 
+			PULSE+BalancePowerDistribution, D(),															// LONG HOLD down Balance PIPs button to activate
+			PULSE+IncreaseEnginesPower, D(),
+			PULSE+IncreaseWeaponsPower, D(),
+			PULSE+IncreaseEnginesPower, D(),
+			PULSE+IncreaseWeaponsPower, D(),
+			PULSE+IncreaseWeaponsPower);
+			
+	ToggleTrafficControl = CHAIN(PULSE+ToggleFramerate, D(), PULSE+ToggleBandwidth);
+	
+	RequestDocking =  CHAIN(																	// MACRO: Auto-Docking Request //  
+			LOCK+PULSE+SelectTargetPanel, D(),
+			PULSE+SelectNextTab, D(),																// Limitation: This will only work correctly if Target Panel cursor in 
+			PULSE+SelectNextTab, D(),																//			   default/orig position, else will be misaligned.
+			PULSE+UI_Select, D(),
+			PULSE+UI_Down, D(),
+			PULSE+UI_Select, D(),
+			PULSE+SelectPrevTab, D(),
+			PULSE+SelectPrevTab, D(),
+			PULSE+UI_Back, LOCK);
+}

@@ -1,0 +1,132 @@
+// weapons
+define PrimaryFire DX1 
+define SecondaryFire DX6
+define NextFireGroup DX4
+define PrevFireGroup DX3
+define DeployHardpoints DX5
+// targeting
+define SelectTargetAhead DX2
+define SelectPrevTarget DX7
+define SelectNextTarget DX8
+// targeting - hostiles
+define SelectNextHostile DX9
+define SelectPrevHostile DX10
+define SelectHighestThreat DX11
+// targeting - subsystems
+define SelectNextSubsystem DX12
+define SelectPrevSubsystem DX13
+// defensive
+define ToggleSilentRunning DX14
+define DeployHeatsink USB[0x19]     // V 
+define UseShieldCell DX16
+define ChargeECM DX17
+define FireChaff DX18
+// systems
+define EngageEngineBoost DX27 // USB[0x2B] // DX27
+define IncreaseEnginesPower USB[0x52]      // UP 
+define IncreaseWeaponsPower USB[0x4F]      // RIGHT 
+define IncreaseSystemsPower USB[0x50]     // LEFT 
+define BalancePowerDistribution USB[0x51] // DOWN 
+define ToggleFlightAssist DX23
+define EjectAllCargo DX24
+define ToggleCargoScoop USB[0x4A]           // HOME
+define ToggleShipLights USB[0x49]           // INSERT
+define ToggleLandingGear USB[0x0F]          // L
+define ToggleRotationalCorrection USB[0x31] // /
+define ToggleOrbitLines USB[0x2E]
+define ToggleFramerate L_CTL+USB[0x09]      // CTRL + F
+define ToggleBandwidth L_CTL+USB[0x05]      // CTRL + B
+define RadarIncreaseRange USB[0x4B]         // PAGE UP
+define RadarDecreaseRange USB[0x4E]         // PAGE DOWN
+// navigation
+define EngageHyperSuper USB[0x0D]           // J
+define EngageSupercruise DX28
+define EngageHyperspace DX29
+define TargetNextSystemInRoute DX30
+define OpenGalaxyMap DX31
+define OpenSystemMap DX32
+define SetSpeedBlueZone DX15
+define SetSpeedDeadstop DX19
+// multi crew
+define MultiCrewToggleMode DX27
+define MultiCrewPrimaryUtilityFire DX3
+define MultiCrewSecondaryUtilityFire DX4
+define SelectNextMultiCrewCockpitUI DX7
+define SelectPrevMultiCrewCockpitUI DX8
+// wing
+define SelectWingman1 USB[0x24]         // 7
+define SelectWingman2 USB[0x25]         // 8
+define SelectWingman3 USB[0x26]         // 9
+define SelectWingmanTarget USB[0x27]    // 0
+define EngageWingmanNavLock USB[0x2D]   // -
+// fighters
+define OrderFighterDock USB[0x62]           // NUMPAD 0
+define OrderDefensiveBehaviour USB[0x59]    // NUMPAD 1
+define OrderAggresiveBehaviour USB[0x5A]    // NUMPAD 2
+define OrderFocusTarget USB[0x5B]           // NUMPAD 3
+define HoldFire USB[0x5C]                   // NUMPAD 4
+define HoldPosition USB[0x5D]               // NUMPAD 5
+define OrderFollow USB[0x5E]               // NUMPAD 6
+// srv
+define ToggleDriveAssist DX23
+define RecallDismissShip DX26
+define ToggleHandbrake USB[0x1B]            // X
+define VerticalThrusters DX25
+define ToggleBuggyTurret DX30
+// interface 
+define UI_Select DX1
+define UI_Back DX6
+define UI_Up  USB[0x52] 
+define UI_Down  USB[0x51]
+define UI_Left  USB[0x50]
+define UI_Right USB[0x4F]
+// interface - panels
+define SelectTargetPanel USB[0x1E]      // 1
+define SelectCommsPanel USB[0x1F]       // 2
+define SelectRolePanel USB[0x20]        // 3
+define SelectSystemsPanel USB[0x21]     // 4
+define SelectNextTab USB[0x08]          // E
+define SelectPrevTab USB[0x14]          // Q
+define QuickCommsPanel USB[0x28]        // Enter
+define MicrophoneMute USB[0x38]         // backslash
+define OpenFriendsMenu USB[0x09]        // F
+// other 
+define WeaponColourToggle DX21
+define EngineColourToggle DX22
+define UIFocus L_SHIFT
+define HideShipGui L_CTL+L_ALT+USB[0x0A] 					// CTRL+ALT+G
+
+// DX20
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------//
+// REFERENCE: USB KEY DEFINITIONS //																															//
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//																																								//
+//	A	USB[0x04]		1	USB[0x1E]		ENTER		USB[0x28]		PRINT SCREEN	USB[0x46]		NUMPAD /	USB[0x54]		F1		USB[0x3A]			//
+//	B	USB[0x05]		2	USB[0x1F]		ESCAPE		USB[0x29]		SCROLL LOCK		USB[0x47]		NUMPAD *	USB[0x55]		F2		USB[0x3B]			//
+//	C	USB[0x06]		3	USB[0x20]		BACKSPACE	USB[0x2A]		PAUSE/BREAK		USB[0x48]		NUMPAD -	USB[0x56]		F3		USB[0x3C]			//
+//	D	USB[0x07]		4	USB[0x21]		TAB			USB[0x2B]		NUM LOCK		USB[0x53]		NUMPAD +	USB[0x57]		F4		USB[0x3D]			//
+//	E	USB[0x08]		5	USB[0x22]		SPACE		USB[0x2C]		INSERT			USB[0x49]		NUMPAD ENT	USB[0x58]		F5		USB[0x3E]			//
+//	F	USB[0x09]		6	USB[0x23]		-			USB[0x2D]		HOME			USB[0x4A]		NUMPAD 1	USB[0x59]		F6		USB[0x3F]			//
+//	G	USB[0x0A]		7	USB[0x24]		=			USB[0x2E]		PAGE UP			USB[0x4B]		NUMPAD 2	USB[0x5A]		F7		USB[0x40]			//
+//	H	USB[0x0B]		8	USB[0x25]		{			USB[0x2F]		DELETE			USB[0x4C]		NUMPAD 3	USB[0x5B]		F8		USB[0x41]			//
+//	I	USB[0x0C]		9	USB[0x26]		}			USB[0x30]		END				USB[0x4D]		NUMPAD 4	USB[0x5C]		F9		USB[0x42]			//
+//	J	USB[0x0D]		0	USB[0x27]		/			USB[0x31]		PAGE DOWN		USB[0x4E]		NUMPAD 5	USB[0x5D]		F10		USB[0x43]			//
+//	K	USB[0x0E]							EUROPE1**	USB[0x32]										NUMPAD 6	USB[0x5E]		F11		USB[0x44]			//
+//	L	USB[0x0F]							:			USB[0x33]		RIGHT ARROW		USB[0x4F]		NUMPAD 7	USB[0x5F]		F12		USB[0x45]			//
+//	M	USB[0x10]							'			USB[0x34]		LEFT ARROW		USB[0x50]		NUMPAD 8	USB[0x60]		F13		USB[0x68]			//
+//	N	USB[0x11]							~			USB[0x35]		DOWN ARROW		USB[0x51]		NUMPAD 9	USB[0x61]		F14		USB[0x69]			//
+//	O	USB[0x12]							,			USB[0x36]		UP ARROW		USB[0x52]		NUMPAD 0	USB[0x62]		F15		USB[0x6A]			//
+//	P	USB[0x13]							.			USB[0x37]										NUMPAD .	USB[0x63]		F16		USB[0x6B]			//
+//	Q	USB[0x14]							\			USB[0x38]		MUTE			USB[0x7F]		NUMPAD =	USB[0x67]		F17		USB[0x6C]			//
+//	R	USB[0x15]							CAPS LOCK	USB[0x39]		VOL UP			USB[0x80]									F18		USB[0x6D]			//
+//	S	USB[0x16]														VOL DOWN		USB[0x81]									F19		USB[0x6E]			//
+//	T	USB[0x17]							L_CTL		USB[0xE0]																	F20		USB[0x6F]			//
+//	U	USB[0x18]							L_SHIFT		USB[0xE1]		EUROPE2**		USB[0x64]									F21		USB[0x70]			//
+//	V	USB[0x19]							L_ALT		USB[0xE2]		APPLICATION		USB[0x65]									F22		USB[0x71]			//
+//	W	USB[0x1A]							L_WIN		USB[0xE3]		POWER			USB[0x66]									F23		USB[0x72]			//
+//	X	USB[0x1B]							R_CTL		USB[0xE4]																	F24		USB[0x73]			//
+//	Y	USB[0x1C]							R_SHIFT		USB[0xE5]																								//
+//	Z	USB[0x1D]							R_ALT		USB[0xE6]																								//
+//											R_WIN		USB[0xE7]	** Further Special Keyboard Commands on page 54/60 of Target Script Editor Manual **		//
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------//
